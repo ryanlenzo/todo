@@ -1,4 +1,11 @@
-# Sleekflow Software Engineer Project
+# Sleekflow Software Engineer Project(LENZO's ANSWER)
+1. *Backend programming language:* Java Spring Boot
+2. *Database programming language:* MYSQL(table will create and drop if any during the startup, the DB credential and URL port is in application.properties)
+3. *Architecture Diagram:* located in the project folder/file/architecture_diagram.png
+4. *Postman Collection for API:* located in the project folder/file/TODO.postman_collection.JSON
+5. Feel free to contact me if any issues, +601158585815(ryanlenzo@gmail.com)
+
+# Sleekflow Software Engineer Project(QUESTION)
 
 *Objective:* Develop a scalable and well-designed TODO list API application that allows users to manage their TODOs, demonstrating your backend development skills,
 API design expertise, and software engineering best practices.
@@ -46,7 +53,7 @@ API design expertise, and software engineering best practices.
 *Guidelines*
 
 1. Use a modern backend programming language and framework (e.g., [ASP.NET](http://ASP.NET) Core, Python with Flask or Django, Node.js with Express, Java with Spring Boot, etc.).
-2. Choose a suitable database for storing TODOs and user data (e.g., PostgreSQL, MongoDB, MySQL, MSSQL).
+2. Choose a suitable database for storing TODOs and userBean data (e.g., PostgreSQL, MongoDB, MySQL, MSSQL).
 3. Implement error handling and validations for API requests.
 4. Write unit tests and integration tests for the core functionality.
 5. Ensure your application can be easily run and tested locally.

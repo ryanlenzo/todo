@@ -1,0 +1,5 @@
+FROM adoptopenjdk:8-jre-hotspot
+
+COPY target/todo-*.jar /demo.jar
+
+CMD ["java", "-jar", "/demo.jar"]

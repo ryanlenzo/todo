@@ -1,65 +1,64 @@
 package com.test.todo.controller;
 
-import com.test.todo.common.ResultMessage;
+import com.test.todo.service.TodoActivityService;
+import com.test.todo.util.APIValidation;
+import com.test.todo.util.ResultMessage;
 import com.test.todo.dto.TodoDTO;
-import com.test.todo.enum_.TodoStatusEnum;
-import com.test.todo.model.Todo;
 import com.test.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/todo")
+@RequestMapping("/api/todo")
 public class TodoController {
 
     @Autowired
     private TodoService todoService;
 
-    @GetMapping("/list")
-    public ResultMessage<?> findTodo(@RequestParam(required = false) TodoStatusEnum status, @RequestParam(required = false) String name, @RequestParam(required = false) String sorting) {
-        List<Todo> list = todoService.findTodo(status, name, sorting);
-        return list != null ?
-            new ResultMessage<>(true, "TODO list found.", list) :
-            new ResultMessage<>(false, "Unable to find TODO list.");
+    @Autowired
+    private TodoActivityService todoActivityService;
+
+    @PostMapping("/mb/list")
+    public ResultMessage<?> findTodo(@RequestBody TodoDTO todo) {
+        return todoService.findTodo(todo);
     }
 
-    @PostMapping("/create")
-    public ResultMessage<String> createTodo(@RequestBody TodoDTO todo) {
-        return todoService.createTodo(todo) != null ?
-                new ResultMessage<>(true, "TODO created successfully.") :
-                new ResultMessage<>(false, "Unable create the TODO.");
+    @PostMapping("/am/create")
+    public ResultMessage<?> createTodo(@RequestBody TodoDTO dto) {
+        ResultMessage<?> validationError = APIValidation.validateTodoCreate(dto);
+        return (validationError != null) ? validationError : todoService.createTodo(dto);
     }
 
-    @PostMapping("/createBatch")
-    public ResultMessage<String> createBatchTodo(@RequestBody List<TodoDTO> todo) {
-        return todoService.createBatchTodo(todo) != null ?
-                new ResultMessage<>(true, "TODO created successfully.") :
-                new ResultMessage<>(false, "Unable create the TODO.");
+    @PostMapping("/am/createBatch")
+    public ResultMessage<?> createBatchTodo(@RequestBody List<TodoDTO> dtoList) {
+        ResultMessage<?> validationError = APIValidation.validateTodoCreateBatch(dtoList);
+        return (validationError != null) ? validationError : todoService.createBatchTodo(dtoList);
     }
 
-    @PatchMapping("/update/{id}")
-    public ResultMessage<String> updateTodo(@PathVariable Long id, @RequestBody TodoDTO todo) {
-        todo.setTodoId(id);
-        return todoService.updateTodo(todo) != null ?
-                new ResultMessage<>(true, "TODO updated successfully.") :
-                new ResultMessage<>(false, "Unable updated the TODO.");
+    @PatchMapping("/am/update/{id}")
+    public ResultMessage<?> updateTodo(@PathVariable Long id, @RequestBody TodoDTO dto) {
+        dto.setId(id);
+        ResultMessage<?> validationError = APIValidation.validateTodoUpdate(dto);
+        return (validationError != null) ? validationError : todoService.updateTodo(dto);
     }
 
-    @PutMapping("/updateStatus/{id}")
-    public ResultMessage<String> updateTodoStatus(@PathVariable Long id, @RequestBody TodoDTO todo) {
-        todo.setTodoId(id);
-        return todoService.updateTodoStatus(todo) != null ?
-                new ResultMessage<>(true, "TODO updated successfully.") :
-                new ResultMessage<>(false, "Unable updated the TODO.");
+    @PutMapping("/mb/updateStatus/{id}")
+    public ResultMessage<?> updateTodoStatus(@PathVariable Long id, @RequestBody TodoDTO dto) {
+        dto.setId(id);
+        ResultMessage<?> validationError = APIValidation.validateTodoUpdateStatus(dto);
+        return (validationError != null) ? validationError : todoService.updateTodoStatus(dto);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResultMessage<String> deleteEntity(@PathVariable("id") Long id) {
-        todoService.deleteTodo(id);
-        return new ResultMessage<>(true, "TODO deleted successfully.");
+    @DeleteMapping("/am/delete/{id}")
+    public ResultMessage<?> deleteEntity(@PathVariable("id") Long id) {
+        ResultMessage<?> validationError = APIValidation.validateTodoDelete(id);
+        return (validationError != null) ? validationError : todoService.deleteTodo(id);
+    }
+
+    @GetMapping("/mb/activityList")
+    public ResultMessage<?> findTodoActivity() {
+        return todoActivityService.findTodoActivity();
     }
 }
