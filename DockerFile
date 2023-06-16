@@ -1,5 +1,5 @@
-FROM adoptopenjdk:8-jre-hotspot
-
-COPY target/todo-*.jar /demo.jar
-
-CMD ["java", "-jar", "/demo.jar"]
+FROM adoptopenjdk:8-jdk-hotspot
+EXPOSE 8080
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
